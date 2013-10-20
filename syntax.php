@@ -199,7 +199,7 @@ class syntax_plugin_wikicalendar extends DokuWiki_Syntax_Plugin {
         $out .= <<<CALHEAD
 <table class="plugin_wikicalendar">
   <tr>
-    <th class="month">
+    <th colspan="2" class="month">
       <form action="{$script}" method="post" class="prevnext">
         <input type="hidden" name="id" value="{$ID}" />
         <input type="hidden" name="plugin_wikicalendar_year" value="{$prevYear}" />
@@ -207,12 +207,8 @@ class syntax_plugin_wikicalendar extends DokuWiki_Syntax_Plugin {
         <input type="submit" class="btn_prev_month" name="submit" value="&larr;" accesskey="P" title="{$this->langMonth[$prevMonth]} {$prevYear}" />
       </form>
     </th>
-    <th class="blank">&nbsp;</th>
-    <th class="blank">&nbsp;</th>
-    <th class="month">{$this->langMonth[$this->viewDate['mon']]}<br />{$this->showYear}<br /></th>
-    <th class="blank">&nbsp;</th>
-    <th class="blank">&nbsp;</th>
-    <th class="month">
+    <th colspan="3" class="month">{$this->showYear} {$this->langMonth[$this->viewDate['mon']]}</th>
+    <th colspan="2" class="month">
       <form action="{$script}" method="post" class="prevnext">
         <input type="hidden" name="id" value="{$ID}" />
         <input type="hidden" name="plugin_wikicalendar_year" value="{$nextYear}" />
@@ -303,7 +299,7 @@ CALHEAD;
         if(file_exists(wikiFN($wp))) {
             $out .= '<div class="isevent">';
             if(auth_quickaclcheck($wp) >= AUTH_READ) {
-                $out .= '<a href="' . wl($wp, array('do' => 'edit', 'plugin_wikicalendar_redirect_id' => $ID, 'plugin_wikicalendar_month' => $this->showMonth, 'plugin_wikicalendar_year' => $this->showYear)) . '" class="plugin_wikicalendar_btn" title="' . $lang['btn_edit'] . '"><img src="' . DOKU_BASE . 'lib/images/edit.gif" alt="' . $lang['edit_btn'] . '"/></a>' . DOKU_LF;
+                //$out .= '<a href="' . wl($wp, array('do' => 'edit', 'plugin_wikicalendar_redirect_id' => $ID, 'plugin_wikicalendar_month' => $this->showMonth, 'plugin_wikicalendar_year' => $this->showYear)) . '" class="plugin_wikicalendar_btn" title="' . $lang['btn_edit'] . '"><img src="' . DOKU_BASE . 'lib/images/edit.gif" alt="' . $lang['edit_btn'] . '"/></a>' . DOKU_LF;
             }
             $out .= '<div class="day_num"><a href="' . wl($wp) . '" class="wikilink1" title="' . $wp . '">'.$day.'</a></div>';
             $out .= '<div class="abstract">' . p_get_metadata($wp, 'description abstract') . '</div>' . DOKU_LF;
@@ -311,9 +307,10 @@ CALHEAD;
             $out .= '<div class="noevent">';
             if(auth_quickaclcheck($wp) >= AUTH_CREATE) {
                 //$out .= $this->_btn_add_day($wp);
-                $out .= '<a href="' . wl($wp, array('do' => 'edit', 'plugin_wikicalendar_redirect_id' => $ID, 'plugin_wikicalendar_month' => $this->showMonth, 'plugin_wikicalendar_year' => $this->showYear)) . '" class="plugin_wikicalendar_btn" title="' . $lang['btn_create'] . '"><img src="' . DOKU_BASE . 'lib/images/edit.gif" alt="' . $lang['edit_btn'] . '" /></a>' . DOKU_LF;
+                //$out .= '<a href="' . wl($wp, array('do' => 'edit', 'plugin_wikicalendar_redirect_id' => $ID, 'plugin_wikicalendar_month' => $this->showMonth, 'plugin_wikicalendar_year' => $this->showYear)) . '" class="plugin_wikicalendar_btn" title="' . $lang['btn_create'] . '"><img src="' . DOKU_BASE . 'lib/images/edit.gif" alt="' . $lang['edit_btn'] . '" /></a>' . DOKU_LF;
+                $out .= '<div class="day_num"><a href="' . wl($wp) . '" class="wikilink1" title="' . $wp . '">'.$day.'</a></div>';
             }
-            $out .= '<div class="day_num">'.$day.'</div>';
+            //$out .= '<div class="day_num">'.$day.'</div>';
         }
         $out .= '</div>';
         return ($out);
