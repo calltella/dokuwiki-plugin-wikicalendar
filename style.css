@@ -3,10 +3,11 @@
  * @author Michael Klier <chi@chimeric.de>
  */
 
+
 div.dokuwiki div.plugin_wikicalendar {
-  border: 1px solid __border__;
+  /** border: 1px solid __border__;
   padding: 1em 1em 1em 1.5em;
-  margin: 1em;
+  margin: 1em; */
   float: left;
 }
 
@@ -16,9 +17,10 @@ div.dokuwiki table.plugin_wikicalendar tr:hover {
  
 div.dokuwiki table.plugin_wikicalendar th.month {
   text-align: center;
-  height: 2em;
+  height: 0.8em;
   vertical-align: middle;
-  color:  __black__;
+  color: black;
+  width: 40px;
 }
 
 div.dokuwiki table.plugin_wikicalendar td {
@@ -55,9 +57,9 @@ div.dokuwiki table.plugin_wikicalendar td.today:hover {
  
 div.dokuwiki table.plugin_wikicalendar div.noevent,
 div.dokuwiki table.plugin_wikicalendar div.isevent {
-  width: 7em;
-  height: 3em;
-  padding: 0.2em;
+  width: 3em;
+  height: 1.2em;
+  padding: 0.1em;
   float: right;
 }
  
@@ -116,6 +118,34 @@ div.dokuwiki a.plugin_wikicalendar_btn:hover {
   text-decoration: none;
 }
 
+/* Modifed by Achilles 2010.9.19 */
+div.dokuwiki div.plugin_wikicalendar {
+  width: 54%;
+  padding: 1em 1em 0em 0.5em;
+  margin: 0.5em;
+}
+ 
+div.dokuwiki table.plugin_wikicalendar{
+  width: 70%;
+}
+ 
+div.dokuwiki table.plugin_wikicalendar td {
+  width: 1.2em;
+}
+ 
+div.dokuwiki table.plugin_wikicalendar div.noevent,
+div.dokuwiki table.plugin_wikicalendar div.isevent {
+  width: 1.2em;/* 7em; */
+}
+ 
+div.dokuwiki table.plugin_wikicalendar td.day:hover div.abstract,
+div.dokuwiki table.plugin_wikicalendar td.today:hover div.abstract {
+  left: 10px;/* 70px; */
+  width: 8em;/* auto; */
+}
+
+
 /**
  * vim:ts=2:sw=2:et:enc=utf-8:
  */
+
