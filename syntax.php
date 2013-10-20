@@ -270,7 +270,7 @@ CALHEAD;
  
             // fill remaining days with blanks 
             if($i == $this->numDays && $wd < 7) {
-                while($wd<7) {
+                while($wd+1<7) {
                     $out .= '<td class="blank">&nbsp;</td>';
                     $wd++;
                 }
