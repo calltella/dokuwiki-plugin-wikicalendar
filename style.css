@@ -43,7 +43,7 @@ div.dokuwiki table.plugin_wikicalendar td.weekday {
  
 div.dokuwiki table.plugin_wikicalendar td.day,
 div.dokuwiki table.plugin_wikicalendar td.today {
-  padding: 0.2em;
+  padding: 0em;
 }
  
 div.dokuwiki table.plugin_wikicalendar td.blank {
@@ -126,7 +126,7 @@ div.dokuwiki div.plugin_wikicalendar {
 }
  
 div.dokuwiki table.plugin_wikicalendar{
-  width: 70%;
+  width: 170px;
 }
  
 div.dokuwiki table.plugin_wikicalendar td {
@@ -135,7 +135,12 @@ div.dokuwiki table.plugin_wikicalendar td {
  
 div.dokuwiki table.plugin_wikicalendar div.noevent,
 div.dokuwiki table.plugin_wikicalendar div.isevent {
-  width: 1.2em;/* 7em; */
+  padding: 0.2em;
+  width: 1.6em;
+}
+
+div.dokuwiki table.plugin_wikicalendar td.mute a {
+  color: __lightgray__;
 }
  
 div.dokuwiki table.plugin_wikicalendar td.day:hover div.abstract,
@@ -144,7 +149,9 @@ div.dokuwiki table.plugin_wikicalendar td.today:hover div.abstract {
   width: 8em;/* auto; */
 }
 
-
+div.dokuwiki table.plugin_wikicalendar td.weekday {
+  background: __nacre__;
+}
 /**
  * vim:ts=2:sw=2:et:enc=utf-8:
  */

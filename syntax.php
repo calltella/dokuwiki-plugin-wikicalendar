@@ -131,9 +131,19 @@ class syntax_plugin_wikicalendar extends DokuWiki_Syntax_Plugin {
             $this->gTimestamp   = mktime(0,0,0,$this->showMonth,1,$this->showYear); 
             $this->numDays      = date('t',$this->gTimestamp);
             $this->viewDate     = getdate($this->gTimestamp);
-            $this->today        = ($this->viewDate['mon'] == $this->curDate['mon'] && 
-                                   $this->viewDate['year'] == $this->curDate['year']) ? 
-                                   $this->curDate['mday'] : null;
+            $this->today        = new DateTime(); 
+            $this->firstwday    = new DateTime();
+            $this->firstwday->setDate($this->showYear, $this->showMonth, 1);
+            if ($this->getConf('weekstart') == 'Sunday') {
+                date_modify($this->firstwday, '-'.date('w',$this->gTimestamp).' day');
+            } else {
+                date_modify($this->firstwday, '-'.(date('w',$this->gTimestamp)-1).' day');
+            }
+            $this->lastwday     = clone $this->firstwday;
+            date_modify($this->lastwday, '+'.(5*7-1).' day');
+            if ( $this->lastwday->format('m') == $this->showMonth ) {
+                date_modify($lastwday, '+7 day');
+            }
 
             // if month directory exists we keep the old scheme
             if(is_dir($conf['datadir'].'/'.str_replace(':','/',$this->calendar_ns.':'.$this->showYear.':'.$this->showMonth))) {
@@ -218,73 +228,54 @@ class syntax_plugin_wikicalendar extends DokuWiki_Syntax_Plugin {
     </th>
   </tr>
 CALHEAD;
- 
-        // create calendar weekday-headers
-        $out .= "<tr>";
-        if($this->getConf('weekstart') == 'Sunday') {
-            $last = array_pop($this->langDays);
-            array_unshift($this->langDays, $last);
+    // create calendar weekday-headers
+    $out .= "<tr>";
+    if($this->getConf('weekstart') == 'Sunday') {
+        $last = array_pop($this->langDays);
+        array_unshift($this->langDays, $last);
+    }
+    foreach($this->langDays as $day) {
+        $out .= '<td class="weekday">'.$day.'</td>';
+    }
+    $out .= "</tr>\n";
+
+    $diff = $this->lastwday->diff($this->firstwday)->format('%a');
+    for($i=0;$i<=$diff;$i++) {
+        //set day-wikipage
+        $this->month_ns = $this->calendar_ns.':'.$this->firstwday->format('Y').':'.$this->firstwday->format('m');
+        $dayWP = $this->month_ns.':'.$this->firstwday->format('d');
+
+        // check for today
+        if($this->today->format('Ymd') == $this->firstwday->format('Ymd')) {
+            $cell = '<td class="today">'.$this->_calendar_day($dayWP,$this->firstwday->format('d')).'</td>';
+        } elseif ( $this->showMonth != $this->firstwday->format('m')) {
+            $cell = '<td class="day mute">'.$this->_calendar_day($dayWP,$this->firstwday->format('d')).'</td>';
+        } else {
+            $cell = '<td class="day">'.$this->_calendar_day($dayWP,$this->firstwday->format('d')).'</td>';
         }
-        foreach($this->langDays as $day) {
-            $out .= '<td class="weekday">'.$day.'</td>'; 
+
+        // calendar last day
+        if ($this->firstwday->format('Ymd') == $this->lastwday->format('Ymd')){
+            $out .= $cell;
+            break;
         }
-        $out .= "</tr>\n";
- 
-        // create calendar-body
-        for($i=1;$i<=$this->numDays;$i++) {
-            $day = $i;
-            //set day-wikipage - use leading zeros on new pages
-            if($day < 10) {
-                if(page_exists($this->month_ns.':'.$day)) {
-                    $dayWP = $this->month_ns.':'.$day;
-                } else {
-                    $dayWP = $this->month_ns.':0'.$day;
-                }
-            } else {
-                $dayWP = $this->month_ns.':'.$day;
-            }
-            // close row at end of week
-            if($wd == 7) $out .= '</tr>';
-            // set weekday
-            if(!isset($wd) or $wd == 7) { $wd = 0; }
-            // start new row when new week starts
-            if($wd == 0) $out .= '<tr>';
- 
-            // create blank fields up to the first day of the month
-            $offset = ($this->getConf('weekstart') == 'Sunday') ? 0 : 1;
-            if(!$this->firstWeek) {
-                while($wd < ($this->MonthStart - $offset)) {
-                    $out .= '<td class="blank">&nbsp;</td>';
-                    $wd++;
-                }
-                // ok - first week is printet
-                $this->firstWeek = true;
-            }
- 
-            // check for today
-            if($this->today == $day) {
-                $out .= '<td class="today">'.$this->_calendar_day($dayWP,$day).'</td>';
-            } else {
-                $out .= '<td class="day">'.$this->_calendar_day($dayWP,$day).'</td>';
-            }
- 
-            // fill remaining days with blanks 
-            if($i == $this->numDays && $wd < 7) {
-                while($wd+1<7) {
-                    $out .= '<td class="blank">&nbsp;</td>';
-                    $wd++;
-                }
-                $out .= '</tr>';
-            }
- 
-            // dont forget to count weekdays
-            $wd++;
+        if ( $this->getConf('weekstart') == 'Sunday' && $this->firstwday->format('l') == 'Saturday'){
+            $out .= $cell . '</tr>';
+        } elseif ( $this->getConf('weekstart') == 'Monday' && $this->firstwday->format('l') == 'Sunday'){
+            $out .= $cell . '</tr>';
+        } elseif ( $this->getConf('weekstart') == 'Monday' && $this->firstwday->format('l') == 'Monday'){
+            $out .= '<tr>' . $cell;
+        } elseif ( $this->getConf('weekstart') == 'Sunday' && $this->firstwday->format('l') == 'Sunday'){
+            $out .= '<tr>' . $cell;
+        } else {
+            $out .= $cell;
         }
+
+        date_modify($this->firstwday, '+1 day');
+    }
+    $out .= '</table>';
  
-        // finally close the table
-        $out .= '</table>';
- 
-        return ($out);
+    return ($out);
     }
  
     /**
