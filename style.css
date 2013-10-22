@@ -17,14 +17,16 @@ div.dokuwiki table.plugin_wikicalendar tr:hover {
  
 div.dokuwiki table.plugin_wikicalendar th.month {
   text-align: center;
-  height: 0.8em;
+  height: 1.5em;
   vertical-align: middle;
-  color: black;
-  width: 40px;
+  color: __black__;
+  border-bottom: 1px solid __border__;
+  border-right: 1px solid __border__;
 }
 
 div.dokuwiki table.plugin_wikicalendar td {
-  border: 1px solid __border__;
+  border-bottom: 1px solid __border__;
+  border-right: 1px solid __border__;
 }
 
 div.dokuwiki table.plugin_wikicalendar_go2 {
@@ -127,6 +129,9 @@ div.dokuwiki div.plugin_wikicalendar {
  
 div.dokuwiki table.plugin_wikicalendar{
   width: 170px;
+  border-collapse: collapse;
+  border-left: 1px solid __border__;
+  border-top: 1px solid __border__;
 }
  
 div.dokuwiki table.plugin_wikicalendar td {
@@ -140,7 +145,7 @@ div.dokuwiki table.plugin_wikicalendar div.isevent {
 }
 
 div.dokuwiki table.plugin_wikicalendar td.mute a {
-  color: __lightgray__;
+  color: __text_other__;
 }
  
 div.dokuwiki table.plugin_wikicalendar td.day:hover div.abstract,
